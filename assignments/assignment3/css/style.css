@@ -33,3 +33,6 @@ div {
 .found{
   background-color: yellow;
 }
+#win{
+  opacity: 0;
+}
