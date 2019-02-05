@@ -3,3 +3,16 @@
 This is the style file for this project.
 
 **********************************************/
+
+section{
+text-align: center;
+text-transform: capitalize;
+font-family: 'Helvetica';
+}
+.banner{
+padding-top: 5%;
+width: 100%;
+height: 20%;
+position: absolute;
+background: url("../assets/images/pressyy.jpg") no-repeat fixed center top ;
+}
