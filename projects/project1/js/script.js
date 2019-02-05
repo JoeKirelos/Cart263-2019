@@ -15,9 +15,11 @@ let b;
 let count = 0;
 let insults1 = [];
 let insults2 = [];
+let bloop;
 $(document).ready(setup);
 
 function setup(){
+  bloop = new Audio("assets/sounds/bloop.mp3");
   insults1.push("Were you dropped on your head as a kid ? come on!");
   insults1.push("How hard can it be it's only 3 words, a whole game awaits");
   insults1.push("Oh my Zeus, do you even want to play this game ?");
@@ -61,6 +63,7 @@ function resetNCount(){
   $('.banner').css('padding-top',padding+"px");
   count++;
   if (count===5){
+    bloop.play();
     $('.hiddenAD').removeClass("hiddenAD").addClass("dialogue");
   }else if (count>5){
     $('.dialogue').removeClass("dialogue").addClass("hiddenAD");
