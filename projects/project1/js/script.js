@@ -46,8 +46,8 @@ function setup(){
   setInterval(update,50);
   //tracks if the player hit enter
   $('input').on("keyup",function(event){
-    let z = event.which;
-    if(z===13){
+    let keyEntered = event.which;
+    if(keyEntered===13){
       //if the player tried to copy paste the text they get a special insult
       if(textInput==="Sisyphus Was Here" || textInput==="sisyphus was here" || textInput==="Sisyphus was her"){
         $('#insults').prepend(`<p>Foolish, you think Zeus would let Sisyphus get any assistance on his quest! Try Again!</p>`);
