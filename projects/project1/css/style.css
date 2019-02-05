@@ -1,29 +1,35 @@
+/* border box to avoid side scrolling */
 *{
   box-sizing: border-box;
 }
+/* black background white text just because I am edgy like that ( though i feel like it's a good aesthetic ) */
 body{
   background: black;
   color: white;
 }
+/* cneter the section on screen, have it all in helvetica and capitalized */
 section{
-text-align: center;
-text-transform: capitalize;
-font-family: 'Helvetica';
+  text-align: center;
+  text-transform: capitalize;
+  font-family: 'Helvetica';
 }
+/* have the banner be absolutely positioned at the bottom which will make scrolling show certain areas of the image */
 .banner{
-padding-top : 0%;
-margin-top: 2%;
-width: 100%;
-height: 20%;
-position: absolute;
-background: url("../assets/images/pressyy.jpg") no-repeat fixed center top ;
+  padding-top : 0%;
+  margin-top: 2%;
+  width: 80%;
+  height: 20%;
+  position: absolute;
+  background: url("../assets/images/pressyy.jpg") no-repeat fixed center top ;
 }
+/* make the text box bigger and match the remainder of the page */
 #textBox{
-padding: 2%;
-background: black;
-color: white;
-font-size: 72px;
+  padding: 2%;
+  background: black;
+  color: white;
+  font-size: 72px;
 }
+/* hide the ad until it's supposed to appear */
 .hiddenAD{
   opacity: 0;
 }
