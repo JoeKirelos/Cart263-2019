@@ -2,10 +2,16 @@
 
 /*****************
 
-Title of Project
-Author Name
+Sisyphus was here
+Joe K
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+This is a sisphean experience
+meant to emulate the sisphean struggle with a determined goal but no way to achieve said goal
 
 ******************/
+
+$(document).ready(setup);
+
+function setup(){
+  
+}
