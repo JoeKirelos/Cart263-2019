@@ -16,6 +16,7 @@ section{
 /* have the banner be absolutely positioned at the bottom which will make scrolling show certain areas of the image */
 .banner{
   padding-top : 0%;
+  display: cover;
   margin-top: 2%;
   width: 80%;
   height: 20%;
