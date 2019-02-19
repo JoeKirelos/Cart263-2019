@@ -15,8 +15,9 @@ Chewing: https://freesound.org/people/InspectorJ/sounds/412068/
 ******************/
 
 // Sound effects for the experience
-let buzzSFX = new Audio("assets/sounds/buzz.mp3");
+let   buzzSFX = new Audio("assets/sounds/buzz.mp3");
 let crunchSFX = new Audio("assets/sounds/crunch.wav");
+let reeSFX = new Audio("assets/sounds/ree.mp3");
 
 // Variable to hold our two key elements
 let $mouth;
@@ -27,23 +28,33 @@ $(document).ready(setup);
 
 function setup() {
   // Get the mouth element from the page
+
   $mouth = $('#mouth');
   $fly = $('#fly');
   $cookie = $('#cookie');
   buzzSFX.loop = true;
-  buzzSFX.play();
+  $fly.on('mousedown',function(){buzzSFX.play()});
 
-  $cookie.draggable({ revert: "valid" });
-  $fly.draggable({ revert: "invalid" });
+
+
+
+  $cookie.draggable({ revert:"valid"});
+  $fly.draggable();
 
   $mouth.droppable({
-    accept: $fly,
-    drop: function(event,ui) {
+    drop:
+    function(event,ui) {
+      console.log(ui.draggable.attr("id"));
+      if(ui.draggable.attr("id") === "fly"){
         ui.draggable.remove();
         $(this).attr('src','assets/images/mouth-closed.png');
         buzzSFX.pause();
         crunchSFX.play();
         setInterval(chew,250);
+      }
+      else{
+        reeSFX.play();
+      }
       }
   });
 }
