@@ -2,10 +2,22 @@
 
 /*****************
 
-Title of Project
-Author Name
+automated momo challenge
+Joe K
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+simulated chatbox with choices for what the player can say, allows the player to choose an option and depending on their choice, advances the dialogue.
+will at one point talk to the player and ask for voice input from them.
+
 
 ******************/
+
+$(document).ready(setup);
+
+
+
+function setup() {
+  $("#log").prepend('<p class="momo"> Hello ! </p>');
+  $("#choice1").prop("value","Hi ?");
+  $("#choice2").prop("value","Um, who's this ?");
+  $("#choice3").prop("value","Hey what's up ?");
+}

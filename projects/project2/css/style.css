@@ -12,8 +12,10 @@ body{
   background: black;
 }
 
+#log{
+  color: white;
+}
 #chatBox{
-  text-align: center;
   padding-top: 20px;
   border-style: double;
   border-color: white;
@@ -34,4 +36,9 @@ body{
   background: black;
   flex-grow: 1;
   color: white;
+}
+
+.momo{
+  padding-left: 10px;
+  font-family: "Helvetica";
 }
