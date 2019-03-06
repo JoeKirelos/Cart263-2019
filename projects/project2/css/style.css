@@ -3,3 +3,35 @@
 This is the style file for this project.
 
 **********************************************/
+*{
+  margin: none;
+  box-sizing: border-box;
+}
+
+body{
+  background: black;
+}
+
+#chatBox{
+  text-align: center;
+  padding-top: 20px;
+  border-style: double;
+  border-color: white;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+#choiceBox{
+  border-style: solid;
+  border-color: "#999";
+  background: white;
+  margin:  10px;
+  display: flex;
+}
+
+.choices{
+  margin: 5px;
+  background: black;
+  flex-grow: 1;
+  color: white;
+}
