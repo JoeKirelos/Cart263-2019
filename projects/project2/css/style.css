@@ -10,6 +10,7 @@ This is the style file for this project.
 
 body{
   background: black;
+  font-family: "Helvetica";
 }
 
 #log{
@@ -40,5 +41,9 @@ body{
 
 .momo{
   padding-left: 10px;
-  font-family: "Helvetica";
+}
+
+.player{
+  text-align: right;
+  padding-right: 10px;
 }
