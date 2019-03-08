@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Creepster');
 /*********************************************
 
 This is the style file for this project.
@@ -20,8 +21,8 @@ body{
   padding-top: 20px;
   border-style: double;
   border-color: white;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 35%;
+  margin-right: 35%;
 }
 
 #choiceBox{
@@ -30,6 +31,7 @@ body{
   background: white;
   margin:  10px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .choices{
@@ -43,7 +45,20 @@ body{
   padding-left: 10px;
 }
 
+.momo2{
+  padding-left: 10px;
+  font-family: "Creepster";
+}
+
 .player{
   text-align: right;
   padding-right: 10px;
+}
+
+.hidden{
+  opacity: 0;
+}
+
+#dialog{
+  color: black;
 }
