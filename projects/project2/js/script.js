@@ -116,11 +116,13 @@ function buttonUpdate(){
   if(progression < 6){
    $("#log").append(`<p class="player"> ${$(this).prop('value')}   </p>`);
  } else if (progression === 6){
-      // knife.currentTime=51.5;
-      // knife.play();
-     $("#dialog").removeClass("hidden");
-     $("#dialog").dialog();
-     $(".momo").addClass("momo2");
+   $("#log").append(`<p class="player"> ${$(this).prop('value')}   </p>`);
+    knife.volume=0.05;
+    knife.currentTime=51.5;
+    knife.play();
+    $("#dialog").removeClass("hidden");
+    $("#dialog").dialog();
+    $(".momo").addClass("momo2");
    }
    talkPrimed();
 }
