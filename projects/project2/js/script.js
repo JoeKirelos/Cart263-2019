@@ -10,16 +10,17 @@ will at one point talk to the player and ask for voice input from them.
 
 
 ******************/
-
-$(document).ready(setup);
-
 let progression = 0;
 let coherence = 0;
 let knife;
-let volMod = 0.08;
+let volMod = 0.03;
+let dat;
+
+$(document).ready(setup);
+
 function setup() {
   knife = new Audio("assets/sounds/knife.mp3");
-  $("#log").prepend('<p class="momo"> Hello ! </p>');
+  $.getJSON("js/data.json",loadOptions);
   $("#choice1").prop("value","Hi ?");
   $("#choice2").prop("value","Um, who's this ?");
   $("#choice3").prop("value","Hey what's up ?");
@@ -30,21 +31,20 @@ function setup() {
 }
 
 function choice1Clicked(){
-  if (progression<=6){
+   $(".choices").hide();
+  setTimeout(function(){
+  if (progression<6){
     responsiveVoice.speak("Jisatsu","Japanese Female", {pitch: 0.2, volume:volMod , rate:0.2});
-    if (progression === 1){
-      $("#log").append('<p class="momo"> This is a little bleak should we brighten it up a little ? </p>');
-    }else if (progression === 2){
-      $("#log").append('<p class="momo"> Better ?</p>');
-    }else if (progression === 3){
-      $("#log").append('<p class="momo"> You like it ? So what brings you here ? </p>');
-    }else if (progression === 4){
-      $("#log").append('<p class="momo"> I do, have you heard of five finger fillet ? </p>');
-    }else if (progression === 5){
-      $("#log").append("<p class='momo'>  Yes let's play that game what do you say ? </p>");
+    if (progression===2){
+        $("body").css("background","url(assets/images/sun.jpg");
     }
+    $("#log").append(`<p  class="momo">  ${dat.choicesA[progression]} </p>`);
   }
   optionsUpdate();
+  setTimeout(function(){
+        $(".choices").show();
+  },1000);
+},700);
 }
 
 function choice2Clicked(){
