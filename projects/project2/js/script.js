@@ -123,14 +123,17 @@ function buttonUpdate(){
     $("#dialog").removeClass("hidden");
     $("#dialog").dialog();
     $(".momo").addClass("momo2");
-   }
+  } else if (progression > 6) {
+    hihi();
+  }
    talkPrimed();
 }
 
 function talkPrimed(){
   if (progression >=6){
     if (annyang){
-      var options = { "What (the hell) is going on": hihi,
+      var options = {
+       "What (the hell) is going on": hihi,
        "why are you doing this":hihi,
        "who are you":hihi
       }
@@ -140,5 +143,16 @@ function talkPrimed(){
   }
 }
 function hihi(){
-  $("#log").append("<p class='momo, momo2'> hihi </p>");
+  $("body").css("background","url(assets/images/momo.jpg");
+    setTimeout(function(){
+      $("#log").append("<p class='momo, momo2'> hihi </p>");
+    },700);
+    setTimeout(function(){
+      $("#log").append("<p class='momo, momo2'> hihi </p>");
+    },700);
+    setTimeout(function(){
+      $("#log").append("<p class='momo, momo2'> HAHAHAHAHAHA </p>");
+      responsiveVoice.speak("hahahahahahahahahaha","Japanese Female", {pitch: 0.2, volume: 0.5 , rate:1});
+    },700);
+  }
 }
