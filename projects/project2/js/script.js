@@ -29,7 +29,10 @@ function setup() {
   $("#choice2").on("click",choice2Clicked);
   $("#choice3").on("click",choice3Clicked);
 }
-
+function loadOptions(data){
+  dat = data;
+$("#log").prepend(`<p class="momo"> ${data.choicesA[progression]} </p>`);
+}
 function choice1Clicked(){
    $(".choices").hide();
   setTimeout(function(){
