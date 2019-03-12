@@ -177,5 +177,5 @@ function die(){
     $("#log").append("<p class='momo, momo2'> Bleed and Die </p>");
     responsiveVoice.speak("die","Japanese Female", {pitch: 0.5, volume: 0.5, rate:1.2});
   },500);
-  setTimeout(blood2,500);
+  setTimeout(die,500);
 }
