@@ -1,0 +1,26 @@
+{
+"choicesA" : [
+  "Hello !",
+  "This is a little bleak should we brighten it up a little ? ",
+  "Better ?",
+  "You like it ? So what brings you here ?",
+  "I do, have you heard of five finger fillet ?",
+  "Yes let's play that game what do you say ?"
+],
+"choicesB" : [
+ "Hello !",
+ "A little hesitant are we ? well I understand, would you like me to make this a bit brighter for you ?",
+ "Does this break the ice a little ?",
+ "Now, So what brings you here ?",
+ "It is, I got a game for you, have you heard of five finger fillet ? " ,
+ "There is a song that goes with it. the idea is to stab the space between your fingers, you will figure it out."
+],
+"choicesC" : [
+ "Hello !",
+ "You are friendly. Let's match the energy huh ? ",
+ " Bet ya this is fun eh ?",
+ "Great! So what brings you here ?",
+ "I do, have you heard of five finger fillet ?",
+ "Great let's play that then ?"
+]
+}
