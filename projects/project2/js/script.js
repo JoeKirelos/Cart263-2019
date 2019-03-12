@@ -166,3 +166,16 @@ function haha(){
   },700);
   setTimeout(blood,1400);
 }
+function blood(){
+  setTimeout(function(){
+    $("#log").append("<p class='momo, momo2'> Cut yourself for me </p>");
+  },700);
+  setTimeout(die,1400);
+}
+function die(){
+  setTimeout(function(){
+    $("#log").append("<p class='momo, momo2'> Bleed and Die </p>");
+    responsiveVoice.speak("die","Japanese Female", {pitch: 0.5, volume: 0.5, rate:1.2});
+  },500);
+  setTimeout(blood2,500);
+}
