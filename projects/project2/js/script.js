@@ -154,5 +154,12 @@ function hihi(){
       $("#log").append("<p class='momo, momo2'> HAHAHAHAHAHA </p>");
       responsiveVoice.speak("hahahahahahahahahaha","Japanese Female", {pitch: 0.2, volume: 0.5 , rate:1});
     },700);
-  }
+    setTimeout(haha,1400);
+}
+function haha(){
+  setTimeout(function(){
+    $("#log").append("<p class='momo, momo2'> I wanna see you bleed. </p>");
+    responsiveVoice.speak("hahahahahahahahahaha","Japanese Female", {pitch: 0.2, volume: 0.5, rate:1});
+  },700);
+  setTimeout(blood,1400);
 }
