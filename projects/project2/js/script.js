@@ -48,39 +48,37 @@ function choice1Clicked(){
 }
 
 function choice2Clicked(){
-  if (progression<=6){
-    responsiveVoice.speak("Jisatsu","Japanese Female", {pitch: 0.2, volume: volMod , rate:0.2});
-    if (progression === 1){
-      $("#log").append('<p class="momo"> A little hesitant are we ? well I understand, would you like me to make this a bit brighter for you ? </p>');
-    }else if (progression === 2){
-      $("#log").append('<p class="momo"> Does this break the ice a little ? </p>');
-    }else if (progression === 3){
-      $("#log").append('<p class="momo">Now, So what brings you here ? </p>');
-    }else if (progression === 4){
-      $("#log").append('<p class="momo"> It is, I got a game for you, have you heard of five finger fillet ? </p>');
-    }else if (progression === 5){
-      $("#log").append('<p class="momo">  There is a song that goes with it. the idea is to stab the space between your fingers, you will figure it out. </p>');
-    }
+  $(".choices").hide();
+setTimeout(function(){
+if (progression<6){
+  responsiveVoice.speak("Jisatsu","Japanese Female", {pitch: 0.2, volume: volMod , rate:0.2});
+  if (progression===2){
+      $("body").css("background","url(assets/images/whale.png)");
   }
-  optionsUpdate();
+  $("#log").append(`<p  class="momo">  ${dat.choicesB[progression]} </p>`);
+}
+optionsUpdate();
+setTimeout(function(){
+      $(".choices").show();
+},1000);
+},700);
 }
 
 function choice3Clicked(){
-  if (progression<=6){
-    responsiveVoice.speak("Jisatsu","Japanese Female", {pitch: 0.2, volume: volMod , rate:0.2});
-    if (progression === 1){
-      $("#log").append("<p class='momo'> You are friendly. Let's match the energy huh ?  </p>");
-    }else if (progression === 2){
-      $("#log").append('<p class="momo"> Bet ya this is fun eh ? </p>');
-    }else if (progression === 3){
-      $("#log").append('<p class="momo"> Great! So what brings you here ? </p>');
-    }else if (progression === 4){
-      $("#log").append('<p class="momo">  I do, have you heard of five finger fillet ? </p>');
-    }else if (progression === 5){
-      $("#log").append("<p class='momo'>  Great let's play that then ? </p>");
-    }
+  $(".choices").hide();
+  setTimeout(function(){
+    if (progression<6){
+      responsiveVoice.speak("Jisatsu","Japanese Female", {pitch: 0.2, volume: volMod , rate:0.2});
+      if (progression===2){
+          $("body").css("background","url(assets/images/yume2.jpg");
+      }
+    $("#log").append(`<p  class="momo">  ${dat.choicesC[progression]} </p>`);
   }
-  optionsUpdate();
+    optionsUpdate();
+    setTimeout(function(){
+          $(".choices").show();
+    },1000);
+  },700);
 }
 
 function optionsUpdate(){
