@@ -1,3 +1,4 @@
+/* this is a data list, it contains 3 arrays for the 3 choices that the player chooses from, based on their choice and progression the right string is pushed through */
 {
 "choicesA" : [
   "Hello !",
