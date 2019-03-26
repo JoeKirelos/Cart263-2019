@@ -19,10 +19,31 @@ let kick;
 let snare;
 let hihat;
 let synth;
+let mix = 0.5;
+let gain = 0.4;
 let pattern = ['x','xo','o','*','x','xo','o','*'];
 let patternIndex = 0;
 let counter = 0;
 let synthRandom = 0;
+let ringModulator = new Pizzicato.Effects.RingModulator({
+    speed: 30,
+    distortion: 1,
+    mix: mix
+});
+let dubDelay = new Pizzicato.Effects.DubDelay({
+    feedback: 0.6,
+    time: 0.7,
+    mix: 0.5,
+    cutoff: 700
+});
+let pingPongDelay = new Pizzicato.Effects.PingPongDelay({
+    feedback: 0.6,
+    time: 0.4,
+    mix: mix
+});
+let distortion = new Pizzicato.Effects.Distortion({
+    gain: gain
+});
 function preload() {
 
 }
@@ -40,14 +61,18 @@ function setup() {
   snare = new Pizzicato.Sound('assets/sounds/snare.wav');
   hihat = new Pizzicato.Sound('assets/sounds/hihat.wav');
   synthRandom = floor(random(10,20));
+    synth.addEffect(pingPongDelay);
+    hihat.addEffect(dubDelay);
+    snare.addEffect(ringModulator);
+    kick.addEffect(distortion);
 }
 
 function playNote() {
+  mix = Math.random();
   let i = floor(random(frequencies.length));
   synth.frequency = frequencies[i];
   synth.play();
   synthRandom+=floor(random(5));
-  console.log(synthRandom);
   if (synthRandom/10 % 1 === 0 ){
     synth.stop();
   };
@@ -60,7 +85,6 @@ function mousePressed() {
   setTimeout(playNote,500);
   setTimeout(playDrum,250);
   counter++;
-  console.log('clicked')
 }
 }
 
@@ -77,5 +101,6 @@ function playDrum() {
   if (patternIndex === pattern.length){
     patternIndex = 0;
   }
+  gain = Math.random();
     setTimeout(playDrum,250);
 }
