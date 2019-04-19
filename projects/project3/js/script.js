@@ -28,7 +28,7 @@ let config = {
     update: update
   }
 };
-
+let secCounter = 0;
 let game = new Phaser.Game(config);
 let zSpeed = 20;
 let zombie;
@@ -57,7 +57,7 @@ function create () {
   let zombieAttacking = this.anims.create({
     key: 'zombAttack',
     frames: this.anims.generateFrameNumbers('zombieAttack'),
-    frameRate: 8,
+    frameRate: 12,
     repeat: 1
   })
   let playerJump = this.anims.create({
@@ -127,7 +127,7 @@ if(interaction === true){
   this.physics.add.collider(player, platform);
   this.physics.add.collider(zombie, platform);
   this.physics.add.collider(zombie,fire);
-
+ 
 
 
   this.input.on('pointerdown', (event) => {
@@ -155,13 +155,32 @@ if(interaction === true){
     })
   })
   player.play('walk');
+  zombie.setVelocityX(-80);
 }
 
  function update () {
-   zombie.setVelocityX(-80);
-   if (zombie.x-35<player.x && counter === 0){
-     zombie.play('zombAttack');
-     counter++;
+   if (zombie.x-50<player.x && counter === 0){
+    zombSpeed(zombie);
+   }if(zombie.x<player.x && counter === 0){
+    zombie.anims.chain('zombWalk');
+   }else if(zombie.x-30<player.x && counter === 0 && zombie.y === player.y){
+    this.physics.add.overlap(player, zombie, attacked, null, this);
+    counter++;
    }
    zombie.anims.chain('zombWalk');
+}
+
+function attacked (player, zombie)
+{
+    player.disableBody(true, true);
+    console.log(zombie.body.velocity.x);
+}
+
+function zombSpeed (zombie){
+  if(secCounter === 0){
+    zombie.play('zombAttack');
+    console.log(zombie.body.velocity.x);
+    // zombie.setVelocityX(-40); 
+    secCounter++;
+  }
 }
