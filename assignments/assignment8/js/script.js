@@ -158,7 +158,7 @@ if(interaction === true){
 }
 
  function update () {
-   zombie.setVelocityX(-20);
+   zombie.setVelocityX(-80);
    if (zombie.x-35<player.x && counter === 0){
      zombie.play('zombAttack');
      counter++;
