@@ -19,7 +19,7 @@ let config = {
     default: 'arcade',
     arcade : {
       gravity : { y : 300},
-      debug: false
+      debug: true
     }
   },
   scene: {
@@ -28,6 +28,8 @@ let config = {
     update: update
   }
 };
+
+let fireCounter = 0;
 let secCounter = 0;
 let game = new Phaser.Game(config);
 let zSpeed = 20;
@@ -36,12 +38,12 @@ let player;
 let interaction = false;
 let counter = 0;
 function preload() {
-  this.load.spritesheet('zombieAttack','assets/images/zombieAttack1.png',{frameWidth: 70, frameHeight: 70});
-  this.load.spritesheet('zombieWalk','assets/images/zombieWalk.png',{frameWidth:70, frameHeight:70});
+  this.load.spritesheet('zombieAttack','assets/images/zomAttack.png',{frameWidth: 46, frameHeight: 64});
+  this.load.spritesheet('zombieWalk','assets/images/zombWalk.png',{frameWidth:43, frameHeight:68});
   this.load.spritesheet('sorloJump','assets/images/sorloJump.png',{frameWidth: 70, frameHeight: 70});
   this.load.spritesheet('tiles','assets/images/tiles.png', {frameWidth : 400, frameHeight: 34});
   this.load.spritesheet('sorloBackCast','assets/images/sorloBackCast.png', {frameWidth: 70, frameHeight: 70 });
-  this.load.spritesheet('fire', 'assets/images/fire2.png', { frameWidth: 50, frameHeight: 50 });
+  this.load.spritesheet('fire', 'assets/images/fireF.png', { frameWidth: 20, frameHeight: 33 });
   this.load.spritesheet('sorloWalk', 'assets/images/sorloWalk.png', { frameWidth: 70, frameHeight: 70 });
   this.load.spritesheet('sorloCast','assets/images/sorloCast.png', { frameWidth: 70, frameHeight: 70 });
 }
@@ -58,7 +60,7 @@ function create () {
     key: 'zombAttack',
     frames: this.anims.generateFrameNumbers('zombieAttack'),
     frameRate: 12,
-    repeat: 1
+    repeat: 0
   })
   let playerJump = this.anims.create({
     key: 'jump',
@@ -98,8 +100,8 @@ function create () {
   let fire = this.anims.create({
     key: 'blaze',
     frames: this.anims.generateFrameNumbers('fire'),
-    frameRate: 4,
-    repeat: 0
+    frameRate: 16,
+    repeat: 1
 
   });
 
@@ -110,40 +112,38 @@ function create () {
   let road = this.add.sprite(200,286,'tiles');
 
   road.play('ground');
-
-  player = this.physics.add.sprite(125,225,'sorloWalk');
-  zombie = this.physics.add.sprite(380,225,'zombieWalk');
-
-if(interaction === true){
-  console.log('int')
-  zombie.play('zombAttack');
-}else{
+  player = this.physics.add.sprite(125,225,'sorloWalk').setSize(43,70);
+  zombie = this.physics.add.sprite(380,225,'zombieWalk').setSize(30,68);
   zombie.play('zombWalk');
-}
+
   zombie.setBounce(0.2);
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
 
   this.physics.add.collider(player, platform);
   this.physics.add.collider(zombie, platform);
-  this.physics.add.collider(zombie,fire);
- 
-
 
   this.input.on('pointerdown', (event) => {
-    let fire = this.physics.add.sprite(event.x,event.y,'blaze');
-    this.physics.add.collider(fire,platform);
-    fire.on('animationcomplete', function(animation,frame){
-      fire.destroy();
-    });
+    if(fireCounter === 0){
+      let fire = this.physics.add.sprite(event.x,event.y,'blaze').setSize(16,33).setOffset(0,0);
+      fireCounter++;
       fire.play('blaze');
-    if (event.x < 125){
-      player.play('castInverted');
-    }else{
-    player.play('cast');
+      if (event.x < 125){
+        player.play('castInverted');
+      }else{
+      player.play('cast');
+      }
+      player.anims.chain('walk');
+      this.physics.add.overlap(fire, zombie, function(fire, zombie){  zombie.disableBody(true, true);}, null, this);
+      this.physics.add.overlap(fire, platform, function(fire, platform){  fire.disableBody(true, true); fireCounter--;}, null, this);
+      fire.on('animationcomplete', function(animation,frame){
+        console.log('fireded');
+        fire.disableBody(true,true);
+        fireCounter--;
+        });
     }
-    player.anims.chain('walk')
   });
+
   let jumpKey = this.input.keyboard.addKey('SPACE');
   jumpKey.on('down',function(event){
     player.setVelocityY(-200);
@@ -160,27 +160,18 @@ if(interaction === true){
 
  function update () {
    if (zombie.x-50<player.x && counter === 0){
-    zombSpeed(zombie);
-   }if(zombie.x<player.x && counter === 0){
-    zombie.anims.chain('zombWalk');
-   }else if(zombie.x-30<player.x && counter === 0 && zombie.y === player.y){
-    this.physics.add.overlap(player, zombie, attacked, null, this);
+    zombAttack(zombie);
+   }if(zombie.x-30<player.x && counter === 0 && zombie.y-10 <= player.y+10){
+    this.physics.add.overlap(player, zombie, function(player,zombie){ player.disableBody(true, true); }, null, this);
     counter++;
    }
-   zombie.anims.chain('zombWalk');
 }
 
-function attacked (player, zombie)
-{
-    player.disableBody(true, true);
-    console.log(zombie.body.velocity.x);
-}
 
-function zombSpeed (zombie){
+function zombAttack (zombie){
   if(secCounter === 0){
     zombie.play('zombAttack');
-    console.log(zombie.body.velocity.x);
-    // zombie.setVelocityX(-40); 
     secCounter++;
+    zombie.anims.chain('zombWalk');
   }
 }
