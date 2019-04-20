@@ -19,7 +19,7 @@ let config = {
     default: 'arcade',
     arcade : {
       gravity : { y : 300},
-      debug: true
+      debug: false
     }
   },
   scene: {
@@ -29,15 +29,17 @@ let config = {
   }
 };
 
+let zombieDead = false;
 let fireCounter = 0;
 let secCounter = 0;
 let game = new Phaser.Game(config);
 let zSpeed = 20;
-let zombie;
+let zombie = [];
 let player;
 let interaction = false;
 let counter = 0;
 function preload() {
+  this.load.spritesheet('zomDeath','assets/images/zomdeath.png',{frameWidth: 60, frameHeight: 68});
   this.load.spritesheet('zombieAttack','assets/images/zomAttack.png',{frameWidth: 46, frameHeight: 64});
   this.load.spritesheet('zombieWalk','assets/images/zombWalk.png',{frameWidth:43, frameHeight:68});
   this.load.spritesheet('sorloJump','assets/images/sorloJump.png',{frameWidth: 70, frameHeight: 70});
@@ -105,6 +107,13 @@ function create () {
 
   });
 
+  let zombieDeath = this.anims.create({
+    key: 'zombieDie',
+    frames : this.anims.generateFrameNumbers('zomDeath'),
+    frameRate: 16,
+    repeat: 0
+  });
+
   let platform = this.physics.add.staticGroup();
 
     platform.create(200,286,'tiles').setScale(1).refreshBody();
@@ -113,15 +122,15 @@ function create () {
 
   road.play('ground');
   player = this.physics.add.sprite(125,225,'sorloWalk').setSize(43,70);
-  zombie = this.physics.add.sprite(380,225,'zombieWalk').setSize(30,68);
-  zombie.play('zombWalk');
+  zombies=zombie.push(this.physics.add.sprite(380,225,'zombieWalk').setSize(30,60).setOffset(0,10));
+  zombie[0].play('zombWalk');
 
-  zombie.setBounce(0.2);
+  zombie[0].setBounce(0.2);
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
 
   this.physics.add.collider(player, platform);
-  this.physics.add.collider(zombie, platform);
+  this.physics.add.collider(zombie[0], platform);
 
   this.input.on('pointerdown', (event) => {
     if(fireCounter === 0){
@@ -134,10 +143,10 @@ function create () {
       player.play('cast');
       }
       player.anims.chain('walk');
-      this.physics.add.overlap(fire, zombie, function(fire, zombie){  zombie.disableBody(true, true);}, null, this);
-      this.physics.add.overlap(fire, platform, function(fire, platform){  fire.disableBody(true, true); fireCounter--;}, null, this);
+      this.physics.add.overlap(fire, zombie[0], zombDie, null, this);
+      this.physics.add.overlap(fire, platform, function(fire, platform){  fire.disableBody(true, true); 
+        fireCounter--;}, null, this);
       fire.on('animationcomplete', function(animation,frame){
-        console.log('fireded');
         fire.disableBody(true,true);
         fireCounter--;
         });
@@ -155,14 +164,22 @@ function create () {
     })
   })
   player.play('walk');
-  zombie.setVelocityX(-80);
+  zombie[0].setVelocityX(-80);
 }
 
  function update () {
-   if (zombie.x-50<player.x && counter === 0){
-    zombAttack(zombie);
-   }if(zombie.x-30<player.x && counter === 0 && zombie.y-10 <= player.y+10){
-    this.physics.add.overlap(player, zombie, function(player,zombie){ player.disableBody(true, true); }, null, this);
+   if (zombieDead===true){
+    zombie[0].disableBody(true,true);
+    zombie.shift();
+    console.log('zombie eradicated')
+    zombie.push(this.physics.add.sprite(380,225,'zombieWalk').setSize(30,60).setOffset(0,10));
+    zombieDead === false;
+    zombie[0].play('zombWalk');
+   }
+   if (zombieDead === false &&zombie[0].x-50<player.x && counter === 0){
+    zombAttack(zombie[0]);
+   }if(zombieDead === false && zombie[0].x-30<player.x && counter === 0 && zombie[0].y-10 <= player.y+10){
+    this.physics.add.overlap(player, zombie[0], function(player,zombie){ player.disableBody(true, true); }, null, this);
     counter++;
    }
 }
@@ -170,8 +187,21 @@ function create () {
 
 function zombAttack (zombie){
   if(secCounter === 0){
-    zombie.play('zombAttack');
+    zombie[0].play('zombAttack');
     secCounter++;
-    zombie.anims.chain('zombWalk');
+    zombie[0].anims.chain('zombWalk');
   }
+}
+
+ function zombDie(fire, zombie){ 
+    zombie.play('zombieDie');
+    zombie.setVelocityX(-20);
+    // zombieDead = true;
+    zombie.on('animationcomplete', function(animation,frame){
+      setTimeout(killZomb,1000);
+ },this);
+}
+
+function killZomb(){
+  zombieDead = true;
 }
