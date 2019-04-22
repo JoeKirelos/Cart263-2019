@@ -36,22 +36,32 @@ let config = {
 // create the game
 let game = new Phaser.Game(config);
 
+let restartBool = false;
+// let zombieAttacking = 0;
 let zombDeath = false;
-let deathCounter = 0;
+let zombMDeath = false;
+// let deathCounter = 0;
 let zombies;
+let zombiesM;
+// let j = 0;
+// let k =0;
 let fireCounter = 0;
 let player;
-let interaction = false;
-let x = 0;
+let incVal = -1;
+// let interaction = false;
+// let x = 0;
+// let zombieOn = false;
+let fire;
 //function preload()
 //
 //preloads all the spritesheets
 function preload() {
+  this.load.spritesheet('sorloDie','assets/images/Sorlodie.png',{frameWidth: 80, frameHeight: 80});
   this.load.spritesheet('zom2Death','assets/images/zom2death.png',{frameWidth: 60, frameHeight: 68});
   this.load.spritesheet('zombie2Attack','assets/images/zom2Attack.png',{frameWidth: 46, frameHeight: 64});
   this.load.spritesheet('zombie2Walk','assets/images/zomb2Walk.png',{frameWidth:43, frameHeight:68});
   this.load.spritesheet('zomDeath','assets/images/zomdeath.png',{frameWidth: 60, frameHeight: 68});
-  this.load.spritesheet('zombieAttack','assets/images/zomAttack.png',{frameWidth: 46, frameHeight: 64});
+  this.load.spritesheet('zombieAttack','assets/images/zombAttack.png',{frameWidth: 49, frameHeight: 68});
   this.load.spritesheet('zombieWalk','assets/images/zombWalk.png',{frameWidth:43, frameHeight:68});
   this.load.spritesheet('sorloJump','assets/images/sorloJump.png',{frameWidth: 70, frameHeight: 70});
   this.load.spritesheet('tiles','assets/images/tiles.png', {frameWidth : 400, frameHeight: 34});
@@ -65,6 +75,24 @@ function preload() {
 //
 //creates and handles the animations and movements
 function create () {
+  zombies = this.physics.add.group({
+    defaultKey: 'zombie',
+    createCallback: function (zombie){
+      zombie.setName('zombie'+this.getLength());
+    }
+  });
+  zombiesM = this.physics.add.group({
+    defaultKey: 'zombieM',
+    createCallback: function (zombieM){
+      zombieM.setName('zombieM'+this.getLength());
+    }
+  });
+  let playerDie = this.anims.create({
+    key: 'die',
+    frames: this.anims.generateFrameNumbers('sorloDie'),
+    frameRate: 8,
+    repeat:0
+  })
   //create an animation for the ground, loads the sprite image sets the framerate and the repeat time
   let groundImage = this.anims.create({
     key: 'ground',
@@ -164,7 +192,18 @@ function create () {
   //create a physics sprite for the player walking
   player = this.physics.add.sprite(125,225,'sorloWalk').setSize(43,70);
 
+ 
+  this.time.addEvent({
+    delay: 2500,
+    loop: true,
+    callback: addZombie
+  });
 
+  this.time.addEvent({
+    delay: 3250,
+    loop: true,
+    callback: addZombieM
+  });
 
   //give the player a bounce against the platform
   player.setBounce(0.2);
@@ -174,7 +213,9 @@ function create () {
     //if fire counter is 0 
     if(fireCounter === 0){
       //create a physics object for the fire sprite
-      let fire = this.physics.add.sprite(event.x,event.y,'blaze').setSize(16,33).setOffset(0,0);
+       fire = this.physics.add.sprite(event.x,event.y,'blaze')
+       fire.body.setCircle(5);
+       fire.setOffset(5,20)
       //increase the counter by 1 so that the player can't create fire again
       fireCounter++;
       //play the fire's animation
@@ -190,36 +231,26 @@ function create () {
       //once the player finishes the cast animation play the player walk animation
       player.anims.chain('walk');
 
-
+      this.physics.add.overlap(fire,zombies,function(){ zombDeath = true; fireCounter=0; fire.destroy();  },null,this);
+      this.physics.add.overlap(fire,zombiesM,function(){ zombMDeath = true; fireCounter=0; fire.destroy();   },null,this);
       //create an overlap between fire and platform when they collide delete the fire and reduce the fire counter so that the player can cast another fire
-      this.physics.add.overlap(fire, platform, function(fire, platform){  fire.disableBody(true, true); 
-        fireCounter--;}, null, this);
+      this.physics.add.overlap(fire, platform, function(fire, platform){  fire.destroy(); 
+        fireCounter=0;}, null, this);
         //once the fire animation ends kill the fire and reset the counter
       fire.on('animationcomplete', function(animation,frame){
-        fire.disableBody(true,true);
-        fireCounter--;
+        fire.destroy();
+        fireCounter=0;
         });
     }
+
   });
 
-  let zombies = [];
-  let zombies2 = [];
-  let j = 0;
-  let k =0;
-  setInterval(() => {
-    zombies.push(this.physics.add.sprite(350,225,'zombieWalk').setSize(30,60).setOffset(0,10));
-    zombies[j].play('zombWalk');
-    zombies[j].setVelocityX(-120);
-    j++
-  }, 3000);
-  // setInterval(() => {
-  //   zombies2.push(this.physics.add.sprite(350,225,'zombie2Walk').setSize(30,60).setOffset(0,10))
-  //   zombies2[k].play('zomb2Walk');
-  //   zombies2[k].setVelocityX(-140);
-  //   k++
-  // }, 5000);
-  this.physics.add.collider(zombies, platform);
-  // this.physics.add.collider(zombies2, platform);
+
+
+    this.physics.add.overlap(zombies, player, playerDed, null,this);
+
+    this.physics.add.collider(zombies,platform);
+    this.physics.add.collider(zombiesM,platform);
   //create a jumpkey assign it to space so when it's played
   let jumpKey = this.input.keyboard.addKey('SPACE');
   jumpKey.on('down',function(event){
@@ -238,9 +269,125 @@ function create () {
   //if none of the buttons are pressed simply play the player walk animation
   player.play('walk');
 
-
 }
 
-function update(zombies){
-  // console.log(zombies)
+function update() {
+  // console.log(zombDeath)
+
+  zombies.children.iterate(function(zombie){
+    if(zombDeath === true){
+
+      if(zombie.x <200){
+      zombie.setOffset(-150,25);
+      }if(zombie.x >200){
+        zombie.setOffset(150,25);
+        }
+        zombie.play('zombieDie');
+      zombie.on('animationcomplete', function(animation,frame){
+      zombies.killAndHide(zombie)
+      zombies.remove(zombie);
+        });
+      zombDeath = false;
+    }
+  });
+  Phaser.Actions.IncX(zombies.getChildren(), -1)
+  zombies.children.iterate(function(zombie){
+    if(zombie.x === 175 && zombDeath === false){
+      zombie.play('zombAttack')
+      zombie.anims.chain('zombWalk')
+    }
+});
+zombiesM.children.iterate(function(zombieM){
+  if(zombMDeath === true){
+
+    if(zombieM.x <200){
+      zombieM.setOffset(-150,25);
+      }if(zombieM.x >200){
+        zombieM.setOffset(150,25);
+        }
+        zombieM.play('zombie2Die');
+    zombieM.on('animationcomplete', function(animation,frame){
+      zombiesM.killAndHide(zombieM);
+      zombiesM.remove(zombieM);
+      });
+    zombMDeath = false;
+  }
+});
+Phaser.Actions.IncX(zombiesM.getChildren(), -1)
+zombiesM.children.iterate(function(zombieM){
+  if(zombMDeath=== false && zombieM.x === 200){
+    zombieM.play('zomb2Attack')
+    zombieM.anims.chain('zomb2Walk')
+  }
+});
+if(restartBool === true){
+  restartBool = false;
+  this.scene.restart(this);
 }
+}
+
+
+function addZombie(){
+  let zombie = zombies.get(350,225)
+  zombie.play('zombWalk');
+  zombie.setActive(true);
+  zombie.body.setCircle(25)
+  zombie.setOffset(0,20);
+}
+
+function addZombieM(){
+  let zombieM = zombiesM.get(350,225)
+  zombieM.play('zomb2Walk');
+  zombieM.setActive(true);
+  zombieM.body.setCircle(25)
+  zombieM.setOffset(0,20);
+}
+
+function playerDed(){
+  player.play('die');
+  player.setSize(43,68);
+  player.setOffset(10,10);
+  setTimeout(function(){
+    restartBool= true;
+  },1200)
+}
+
+// // console.log(j)
+//   if(zombieOn===true){
+//     // console.log(j)
+//     // console.log(zombies)
+//     // console.log(zombies.x)
+//     if(zombies.x === 100){
+//       console.log('reading')
+//       // zombAttack(zombies[j]);
+//     }
+//   }
+// }
+
+// function zombieDed(zombies){
+//   zombies.play('zombieDie');
+//   zombies.setVelocityX(-20);
+//   setTimeout(() => {
+//     zombies.disableBody(true,true);
+//   },1500)
+// }
+
+// function zombie2Ded(zombies2){
+//   zombies2.play('zombie2Die');
+//   zombies2.setVelocityX(-20);
+//   setTimeout(() => {
+//     zombies2.disableBody(true,true);
+//   },1500)
+// }
+
+// let zombieAttackStop = 0;
+// function zombAttack(zombies,j){
+//   if(zombieAttacking===zombieAttackStop){
+//   zombies.play('zombAttack');
+//   zombies.on('animationcomplete',function(animation,frame){
+//     zombieAttackStop = zombieAttacking;
+//     });
+//     zombieAttacking++;
+//   zombies.anims.chain('zombWalk');
+// }
+// }

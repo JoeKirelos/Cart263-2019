@@ -32,6 +32,7 @@ let config = {
     update: update
   }
 };
+
 //variables
 // create the game
 let game = new Phaser.Game(config);
