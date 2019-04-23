@@ -13,12 +13,15 @@ class MenuScreen extends Phaser.Scene {
 
         let backGround = this.add.image(0,0,'menuScreen').setOrigin(0);
         let lvOB = this.add.image(200,125,'levO');
-        let lbTB = this.add.image(200,175,'levT');
+        let lvTB = this.add.image(200,175,'levT');
 
         lvOB.setInteractive();
-        
+        lvTB.setInteractive();
         lvOB.on('pointerup', () => {
             this.scene.start('LevelOne')
+        });
+        lvTB.on('pointerup', () => {
+            this.scene.start('LevelTwo')
         });
     }
 }

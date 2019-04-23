@@ -23,7 +23,7 @@ let config = {
       debug: false
     }
   },
-  scene: [ MenuScreen, LevelOne] 
+  scene: [ MenuScreen, LevelOne, LevelTwo ] 
 };
 
 let game = new Phaser.Game(config);
@@ -37,3 +37,5 @@ let player;
 let fire;
 let playerDead= false;
 let playerAlive = true;
+let playerWalking = false;
+let playerLeft = false;
