@@ -39,3 +39,4 @@ let playerDead= false;
 let playerAlive = true;
 let playerWalking = false;
 let playerLeft = false;
+let incVal = -1;

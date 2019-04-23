@@ -127,7 +127,7 @@ preload(){
 
     
   let platform = this.physics.add.staticGroup();
-  platform.create(200,286).setScale(13,1).refreshBody();
+  platform.create(200,286).setScale(18,1).refreshBody();
 
   let backdrop = this.add.sprite(200,150,'backgroundSprite');
      backdrop.play('backgroundSprite');
@@ -223,7 +223,6 @@ preload(){
 update() {
   zombies.children.iterate(function(zombie){
     if(zombDeath === true){
-
       if(zombie.x <200){
       zombie.setOffset(-150,25);
       }if(zombie.x >200){
