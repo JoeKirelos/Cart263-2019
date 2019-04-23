@@ -23,7 +23,7 @@ let config = {
       debug: false
     }
   },
-  scene: LevelOne 
+  scene: [ MenuScreen, LevelOne] 
 };
 
 let game = new Phaser.Game(config);

@@ -5,7 +5,6 @@ constructor(){
 
 
 preload(){
-  this.load.image('bg','assets/images/bg.png');
   this.load.spritesheet('background','assets/images/BGF.png',{frameWidth: 400, frameHeight: 300});
   this.load.spritesheet('sorloDie','assets/images/Sorlodie.png',{frameWidth: 80, frameHeight: 80});
   this.load.spritesheet('zom2Death','assets/images/zom2death.png',{frameWidth: 60, frameHeight: 68});
@@ -48,7 +47,7 @@ preload(){
   let playerDie = this.anims.create({
     key: 'die',
     frames: this.anims.generateFrameNumbers('sorloDie'),
-    frameRate: 8,
+    frameRate: 12,
     repeat:0
   })
   let groundImage = this.anims.create({
@@ -202,6 +201,7 @@ preload(){
     if(playerAlive===true){
       this.physics.add.overlap(zombiesM, player, function(){
       playerDead=true;
+      playerAlive= false;
        }, null,this);
       }
     this.physics.add.collider(zombies,platform);
@@ -267,18 +267,16 @@ zombiesM.children.iterate(function(zombieM){
     zombieM.anims.chain('zomb2Walk')
   }
 });
-if(restartBool === true){
-  restartBool = false;
-  this.scene.restart(this);
-}
+
 if(playerDead===true && playerAlive === false){
 player.play('die');
 playerDead=false;
 player.setSize(43,68);
 player.setOffset(10,10);
-setTimeout(function(){
-  restartBool= true;
-},2000)
+setTimeout( ()=>{
+  playerAlive = true;
+  this.scene.start('MenuScreen');
+},1000)
 }
 }
 }
