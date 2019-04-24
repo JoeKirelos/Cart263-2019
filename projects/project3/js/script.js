@@ -20,7 +20,7 @@ let config = {
     default: 'arcade',
     arcade : {
       gravity : { y : 300},
-      debug: false
+      debug: true
     }
   },
   scene: [ MenuScreen, LevelOne, LevelTwo ] 
@@ -30,6 +30,8 @@ let game = new Phaser.Game(config);
 let restartBool = false;
 let zombDeath = false;
 let zombMDeath = false;
+let zombAttack = false;
+let zombMAttack = false;
 let zombies;
 let zombiesM;
 let fireCounter = 0;

@@ -208,8 +208,10 @@ preload(){
     this.physics.add.collider(zombiesM,platform);
   let jumpKey = this.input.keyboard.addKey('SPACE');
   jumpKey.on('down',function(event){
+    if(player.y > 150){
     player.setVelocityY(-200);
     player.play('jump');
+    }
     player.on('animationcomplete', function(animation,frame){
       if (animation.key === 'jump'){
       player.play('walk');
