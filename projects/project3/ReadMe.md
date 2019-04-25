@@ -1,7 +1,7 @@
 
-#Project 3
-##A study in simple design
-######Joe
+# Project 3
+## A study in simple design
+###### Joe
 
 For me, this project served as an experiment. I have followed a lot of video game analysis on what makes a game good. Often, the idea brought up was that of simple design. One or Two core mechanics that interact with a lot of different ones. I wanted to test that in an endless runner environment, as it allows for a long playtime to test the amount of fun and unique dynamics that could come up. That was the original plan. 
 
