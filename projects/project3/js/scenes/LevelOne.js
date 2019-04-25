@@ -22,7 +22,7 @@ preload(){
 }
 
  create () {
-
+  score = 0;
 
   zombies = this.physics.add.group({
     defaultKey: 'zombie',
@@ -132,12 +132,20 @@ preload(){
   let backdrop = this.add.sprite(200,150,'backgroundSprite');
      backdrop.play('backgroundSprite');
 
+     scoreText = this.add.text(150,20, 'Score: 0', {fontSize: '16px', fill: '#000'});
 
-  // let road = this.add.sprite(200,286,'tiles');
-  // road.play('ground');
   player = this.physics.add.sprite(125,225,'sorloWalk').setSize(43,70);
 
- 
+  this.time.addEvent({
+    delay: 1000,
+    loop: true,
+    callback: function()
+      {
+        score+= 1;
+        scoreText.setText('Score: '+ score)
+      }
+    });
+
   this.time.addEvent({
     delay: 2500,
     loop: true,

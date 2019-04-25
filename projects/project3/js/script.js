@@ -11,9 +11,11 @@ https://opengameart.org/content/sorlo-ultimate-smash-friends
 fire by Chromaeleon
 https://opengameart.org/content/2d-pixel-fire-sprite-strip
 ******************/
+
 //creating phaser configuration 
 let config = {
-  type: Phaser.AUTO,
+  type: Phaser.CANVAS,
+  parent:'phase',
   width: 400,
   height: 300,
   physics : {
@@ -30,8 +32,6 @@ let game = new Phaser.Game(config);
 let restartBool = false;
 let zombDeath = false;
 let zombMDeath = false;
-let zombAttack = false;
-let zombMAttack = false;
 let zombies;
 let zombiesM;
 let fireCounter = 0;
@@ -42,3 +42,5 @@ let playerAlive = true;
 let playerWalking = false;
 let playerLeft = false;
 let incVal = -1;
+let score = 0;
+let scoreText;

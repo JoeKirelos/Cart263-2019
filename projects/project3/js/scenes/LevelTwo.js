@@ -23,6 +23,8 @@ preload(){
 
  create () {
    
+  score = 0;
+
   zombies = this.physics.add.group({
     defaultKey: 'zombie',
     createCallback: function (zombie){
@@ -103,6 +105,13 @@ preload(){
     repeat: -1
   });
 
+  let playerCast = this.anims.create({
+    key: 'cast',
+    frames: this.anims.generateFrameNumbers('sorloCast'),
+    frameRate: 8,
+    repeat:0
+  });
+  
   let playerWalk = this.anims.create({
     key: 'walk',
     frames: this.anims.generateFrameNumbers('sorloWalk'),
@@ -132,6 +141,8 @@ preload(){
   let backdrop = this.add.sprite(200,150,'backgroundSprite');
   backdrop.play('backgroundSprite');
 
+  scoreText = this.add.text(150,20, 'Score: 0', {fontSize: '16px', fill: '#000'});
+
   player = this.physics.add.sprite(125,225,'sorloIdle').setSize(50,70);
   this.physics.add.collider(player, platform);
 
@@ -142,6 +153,15 @@ preload(){
     player.play('jump');
     }
 });
+this.time.addEvent({
+  delay: 1000,
+  loop: true,
+  callback: function()
+    {
+      score+= 1;
+      scoreText.setText('Score: '+ score)
+    }
+  });
 
 this.time.addEvent({
   delay: 2500,
@@ -217,7 +237,8 @@ player.play('idle')
       fire = this.physics.add.sprite(player.x+75,235,'fire')
     }
     this.physics.add.collider(fire,platform);
-    fire.body.setCircle(6);
+    player.play('cast',true);
+    fire.body.setCircle(8);
     fire.setOffset(2,10)
     this.physics.add.overlap(fire,zombies,function(){ zombDeath = true; fireCounter=0; fire.destroy();  },null,this);
     this.physics.add.overlap(fire,zombiesM,function(){ zombMDeath = true; fireCounter=0; fire.destroy();   },null,this);
@@ -230,14 +251,12 @@ player.play('idle')
 });
 if(playerAlive === true){
   this.physics.add.overlap(zombies, player, function(){
-    zombAttack = true;
     playerDead=true;
     playerAlive= false;
    }, null,this);
   }
   if(playerAlive===true){
     this.physics.add.overlap(zombiesM, player, function(){
-      zombMAttack = true;
       playerDead=true;
       playerAlive= false;
      }, null,this);
@@ -259,19 +278,7 @@ update() {
     zombDeath = false;
     }
   });
-  zombies.children.iterate(function(zombie){
-    if(zombAttack===true){
-      zombAttack='false'
-      zombie.play('zombAttack')
-    }
-  });
 
-  zombiesM.children.iterate(function(zombieM){
-    if(zombMAttack===true){
-      zombMAttack='false'
-      zombieM.play('zomb2Attack')
-    }
-  });
 
   zombiesM.children.iterate(function(zombieM){
     if(zombMDeath === true){
