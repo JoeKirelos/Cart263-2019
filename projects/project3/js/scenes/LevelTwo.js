@@ -28,7 +28,7 @@ class LevelTwo extends Phaser.Scene {
   //create()
   //
   //creates the objects on screen, runs once at the start of the game
- create () {
+  create () {
     //set score to zero once the game starts, so that if the level is started over or it's another level the score is rest
     score = 0;
     //create a group to hold the female zombies (this is phaser's equivalent of an array)
@@ -47,8 +47,8 @@ class LevelTwo extends Phaser.Scene {
         zombieM.setName('zombieM'+this.getLength());
       }
     });
-    // create all the animations for the sprites 
-    // set their framerate and times for repeat 
+    // create all the animations for the sprites
+    // set their framerate and times for repeat
     // background image animation
 
     //player death animation
@@ -143,11 +143,11 @@ class LevelTwo extends Phaser.Scene {
       repeat: -1
     });
 
- 
+
     //create a physics platform object give it a size that covers most of the screen
     let platform = this.physics.add.staticGroup();
     platform.create(200,286).setScale(18,1).refreshBody();
-    //hold the sprite for the background 
+    //hold the sprite for the background
     let backdrop = this.add.sprite(200,150,'backgroundSprite');
     //play background sprite
     backdrop.play('backgroundSprite');
@@ -169,7 +169,7 @@ class LevelTwo extends Phaser.Scene {
         player.setVelocityY(-200);
         player.play('jump');
       }
-    }); // this allows the player to jump twice but no more, 
+    }); // this allows the player to jump twice but no more,
 
     //increase the socre by one every second and update the text to display it (this is the phaser equivalent of a setInterval)
     this.time.addEvent({
@@ -184,17 +184,17 @@ class LevelTwo extends Phaser.Scene {
     this.time.addEvent({
       delay: 2500,
       loop: true,
-      callback: function(){ 
+      callback: function(){
         let zomSpawn = Math.floor(Math.random()*2)*400;
         let zombie = zombies.get(zomSpawn,225);
-        //depending on which side the zombie is on flip its X and give it velocity towards the opposite side of the screen 
+        //depending on which side the zombie is on flip its X and give it velocity towards the opposite side of the screen
         if(zombie.x < 200){
           zombie.flipX= true;
           zombie.setVelocityX(120);
         }else if(zombie.x > 200){
           zombie.setVelocityX(-120);
         }
-        //give it the zombie walking animation 
+        //give it the zombie walking animation
         zombie.play('zombWalk');
         //set active is routine with adding a new object to a phaser group
         zombie.setActive(true);
@@ -248,7 +248,7 @@ class LevelTwo extends Phaser.Scene {
         //play the walk animation
         player.play('walk',true);
       }
-      //if key is s 
+      //if key is s
       if(e.key==='s'){
         //stop the zombie's velocity
         player.setVelocityX(0);
@@ -258,7 +258,7 @@ class LevelTwo extends Phaser.Scene {
     },this);
     //if no button is pressed play the player idle animation
     player.play('idle');
-  
+
     //on mouse click
     this.input.on('pointerup', (event) => {
       //if fire counter is 0
@@ -293,7 +293,7 @@ class LevelTwo extends Phaser.Scene {
           fire.destroy();
           fireCounter =0;
         })
-        //play the fire animation 
+        //play the fire animation
         fire.play('fire');
       }
     });
@@ -321,30 +321,32 @@ class LevelTwo extends Phaser.Scene {
   //runs on refresh
   update() {
     //get all of the children of the zombie group
-    //if the zombie gotten is dead
-    if(zombDeath === true){
-      //and they are before passing half the screen
-      if(zombie.x <200){
-        //give their hitbox an offset backwards so that the player doesn't interact with it in the time it takes before it dies
-        zombie.setOffset(-150,25);
-        //if they are past half the screen
-      }if(zombie.x >200){
-          //give their hitbox an offset forwards so that the player doesn't interact with it in the time it takes before it dies
-          zombie.setOffset(150,25);
+    zombies.children.iterate(function(zombie){
+      //if the zombie gotten is dead
+      if(zombDeath === true){
+        //and they are before passing half the screen
+        if(zombie.x <200){
+          //give their hitbox an offset backwards so that the player doesn't interact with it in the time it takes before it dies
+          zombie.setOffset(-150,25);
+          //if they are past half the screen
+        }if(zombie.x >200){
+            //give their hitbox an offset forwards so that the player doesn't interact with it in the time it takes before it dies
+            zombie.setOffset(150,25);
+        }
+        //the reason the offset is added is so that since this plays the zombie death animation then waits till it's over to kill and hide the zombie then remove it from the group
+        //play zombie death animation
+        zombie.play('zombieDie');
+        zombie.on('animationcomplete', function(animation,frame){
+          //kill and hide, hides the sprite then disables the zombie from the group
+          zombies.killAndHide(zombie);
+          //removes it from the group to avoid cluttering the group
+          zombies.remove(zombie);
+        });
+        //set zombie death to false to avoid chain killing all the zombies
+        zombDeath = false;
       }
-      //the reason the offset is added is so that since this plays the zombie death animation then waits till it's over to kill and hide the zombie then remove it from the group
-      //play zombie death animation
-      zombie.play('zombieDie');
-      zombie.on('animationcomplete', function(animation,frame){
-        //kill and hide, hides the sprite then disables the zombie from the group
-        zombies.killAndHide(zombie);
-        //removes it from the group to avoid cluttering the group
-        zombies.remove(zombie);
-      });
-      //set zombie death to false to avoid chain killing all the zombies
-      zombDeath = false;
-    }
-    //applies all the same stuff from the female zombies group to the male 
+    });
+    //applies all the same stuff from the female zombies group to the male
     zombiesM.children.iterate(function(zombieM){
       if(zombMDeath === true){
         if(zombieM.x <200){
@@ -380,4 +382,3 @@ class LevelTwo extends Phaser.Scene {
     }
   }
 }
-

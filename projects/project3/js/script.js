@@ -13,7 +13,7 @@ https://opengameart.org/content/2d-pixel-fire-sprite-strip
 the remaining ones didn't have specific names for either the sprites or creators, or simply didn't require a reference
 ******************/
 
-//creating phaser configuration 
+//creating phaser configuration
 let config = {
   // set phaser as a canvas
   type: Phaser.CANVAS,
@@ -27,15 +27,15 @@ let config = {
     default: 'arcade',
     arcade : {
       gravity : { y : 300},
-      debug: false
+      debug: true
     }
   },
   // give it the scenes to run
-  scene: [ MenuScreen, LevelOne, LevelTwo ] 
+  scene: [ MenuScreen, LevelOne, LevelTwo ]
 };
 // create the game using config
 let game = new Phaser.Game(config);
-// hold the global game variables 
+// hold the global game variables
 // variable to check if the zombie is dead (both male and female zombies)
 let zombDeath = false;
 let zombMDeath = false;
