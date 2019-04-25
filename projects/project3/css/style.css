@@ -1,9 +1,9 @@
-
+/* body margins for the page */
   body {
     margin: 0;
     padding: 0;
   }
-
+/* the recommended settings for the background particles */
   .js-count-particles {
     display: block;
     position: absolute;
@@ -20,7 +20,8 @@
     background-position: 50% 50%;
     z-index:-1;
   }
-
+  
+/* the parent container for phaser centered on screen */
 #phase {
     position: absolute;
     margin-left:40%;
